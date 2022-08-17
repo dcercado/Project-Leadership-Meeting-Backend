@@ -31,7 +31,7 @@ router.post('/register', (req, res) => {
         });
     }
     //Check for the unique Email
-    User.findOne({
+    /*User.findOne({
         username: username
     }).then(user => {
         if (user) {
@@ -39,7 +39,7 @@ router.post('/register', (req, res) => {
                 msg: "User is already taken."
             });
         }
-    });
+    });*/
     // check for the unique Email
     User.findOne({ email: email }).then(user => {
         if (user) {
@@ -52,7 +52,7 @@ router.post('/register', (req, res) => {
     //The data is valid and now we can register the user
     let newUser = new User({
         name,
-        username,
+        username: email,
         password,
         email
     });
@@ -67,7 +67,10 @@ router.post('/register', (req, res) => {
                     success: true,
                     msg: "Nice, user is now registered."
                 });
-            });
+            })
+                .catch((error) => {
+                    console.log("Error saving user: ", error)
+                });
         });
 
     });
@@ -81,11 +84,11 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
     User.findOne({
-        username: req.body.username
+        email: req.body.email
     }).then(user => {
         if (!user) {
             return res.status(404).json({
-                msg: "Username is not found.",
+                msg: "Email is not found.",
                 success: false
             });
 

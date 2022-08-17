@@ -47,6 +47,10 @@ const users = require('./routes/api/users');
 //const passport = require('./config/passport');
 app.use('/api/users', users);
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'))
+})
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
